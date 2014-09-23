@@ -7,7 +7,7 @@
         radius = 10;
 
     for(var i = 100; i <= 900; i = i + 100) {
-        new Point(svgWidth, svgHeight, radius, cx + i * Math.random(), cy + i * Math.random(), i*10);
+        new Point(svgWidth, svgHeight, radius, cx + i * Math.random(), cy + i * Math.random(), i*10, Math.floor(Math.random()*10));
     }
 }());
 
