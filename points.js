@@ -62,6 +62,14 @@
         return y;
     }
 
+    function startMove(intervalTime) {
+        setInterval(function () {
+            circle
+                .attr('cx', getX)
+                .attr('cy', getY)
+        }, intervalTime);
+    }
+
     function start(color, speed) {
         var colorToSet = color === "red" ? "yellow" : "red";
 
@@ -73,15 +81,10 @@
             .each("end", function () {
                 start(colorToSet, speed);
             });
-
-        setInterval(function () {
-            circle
-                .attr('cx', getX)
-                .attr('cy', getY)
-        }, 50);
 }
 
     start('red', 5000);
+    startMove(20);
 
 }());
 
