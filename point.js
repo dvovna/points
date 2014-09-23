@@ -1,10 +1,13 @@
-function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime, moveSpeed) {
+function Point(svgW, svgH, radius, cx, cy, colorChangeTime, moveSpeed) {
     var circle = d3.select('svg').append('circle'),
         circleSize = radius || 10,
         vector = {
             x: 1,
             y: 1
-        };
+        },
+        svgWidth = svgW,
+        svgHeight = svgH,
+        intervalId;
 
     circle
         .attr('cx', cx)
@@ -13,26 +16,20 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime, moveSpeed) 
         .attr('fill', 'red');
 
     function checkRightBottomBorder(currCoord, vectorCoord, maxSize) {
-        return vectorCoord > 0 && (currCoord + circleSize) === maxSize;
+        return vectorCoord > 0 && (currCoord + circleSize) >= maxSize;
     }
 
     function checkLeftTopBorder(coord, vectorCoord) {
         return vectorCoord < 0 && (coord - circleSize) === 0 || coord < 0;
     }
 
-    function updateVeсtorX(currX) {
-        if (checkRightBottomBorder(currX, vector.x, svgWidth)) {
-            vector.x = -1;
-        } else if (checkLeftTopBorder(currX, vector.x)) {
-            vector.x = 1;
-        }
-    }
+    function updateVeсtor(curr, coordStr) {
+        var maxSize = coordStr === 'x' ? svgWidth : svgHeight;
 
-    function updateVectorY(currY) {
-        if (checkRightBottomBorder(currY, vector.y, svgHeight)) {
-            vector.y = -1;
-        } else if (checkLeftTopBorder(currY, vector.y)) {
-            vector.y = 1;
+        if (checkRightBottomBorder(curr, vector[coordStr], maxSize)) {
+            vector[coordStr] = -1;
+        } else if (checkLeftTopBorder(curr, vector[coordStr])) {
+            vector[coordStr] = 1;
         }
     }
 
@@ -43,7 +40,7 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime, moveSpeed) 
     function getX() {
         var x = parseInt((this.attributes.cx.value), 10);
 
-        updateVeсtorX(x);
+        updateVeсtor(x, "x");
 
         return getNextCoord(vector.x, x);
     }
@@ -51,13 +48,13 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime, moveSpeed) 
     function getY() {
         var y = parseInt((this.attributes.cy.value), 10);
 
-        updateVectorY(y);
+        updateVeсtor(y, 'y');
 
         return getNextCoord(vector.y, y);
     }
 
     function startMove(intervalTime) {
-        setInterval(function () {
+        intervalId = setInterval(function () {
             circle
                 .attr('cx', getX)
                 .attr('cy', getY)

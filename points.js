@@ -8,7 +8,7 @@
         cy,
         radius;
 
-    for (var i = 1; i <= 100; i = i + 1) {
+    for (var i = 1; i <= 300; i = i + 1) {
         radius = Math.floor(Math.random() * 50 + 1);
         cx = i * Math.floor(Math.random() * 10 + 1);
         cy = i * Math.floor(Math.random() * 10 + 1);
