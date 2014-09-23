@@ -4,10 +4,6 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime, moveSpeed) 
         vector = {
             x: 1,
             y: 1
-        },
-        mouse = {
-            x: 0,
-            y: 0
         };
 
     circle
@@ -16,63 +12,48 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime, moveSpeed) 
         .attr('r', circleSize)
         .attr('fill', 'red');
 
-    function checkRightBorder(currX) {
-        return vector.x > 0 && (currX + circleSize) === svgWidth;
+    function checkRightBottomBorder(currCoord, vectorCoord, maxSize) {
+        return vectorCoord > 0 && (currCoord + circleSize) === maxSize;
     }
 
-    function checkLeftBorder(currX) {
-        return vector.x < 0 && (currX - circleSize) === 0;
+    function checkLeftTopBorder(coord, vectorCoord) {
+        return vectorCoord < 0 && (coord - circleSize) === 0 || coord < 0;
     }
 
-    function checkBottomBorder(currY) {
-        return vector.y > 0 && (currY + circleSize) === svgHeight;
-    }
-
-    function checkTopBorder(currY) {
-        return vector.y < 0 && (currY - circleSize) === 0;
-    }
-
-    function checkForXEnd(currX) {
-        if (checkRightBorder(currX) || currX === mouse.x) {
+    function updateVeсtorX(currX) {
+        if (checkRightBottomBorder(currX, vector.x, svgWidth)) {
             vector.x = -1;
-        } else if (checkLeftBorder(currX) || currX === mouse.x) {
+        } else if (checkLeftTopBorder(currX, vector.x)) {
             vector.x = 1;
         }
     }
 
-    function checkForYEnd(currY) {
-        if (checkBottomBorder(currY) || currY === mouse.y) {
+    function updateVectorY(currY) {
+        if (checkRightBottomBorder(currY, vector.y, svgHeight)) {
             vector.y = -1;
-        } else if (checkTopBorder(currY) || currY === mouse.y) {
+        } else if (checkLeftTopBorder(currY, vector.y)) {
             vector.y = 1;
         }
+    }
+
+    function getNextCoord(direction, coord) {
+        return direction > 0 ? ++coord : --coord;
     }
 
     function getX() {
         var x = parseInt((this.attributes.cx.value), 10);
 
-        checkForXEnd(x);
+        updateVeсtorX(x);
 
-        if (vector.x > 0) {
-            x++;
-        } else {
-            x--;
-        }
-        return x;
+        return getNextCoord(vector.x, x);
     }
 
     function getY() {
         var y = parseInt((this.attributes.cy.value), 10);
 
-        checkForYEnd(y);
+        updateVectorY(y);
 
-        if (vector.y > 0) {
-            y++;
-        } else {
-            y--;
-        }
-
-        return y;
+        return getNextCoord(vector.y, y);
     }
 
     function startMove(intervalTime) {
