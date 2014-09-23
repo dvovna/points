@@ -4,6 +4,10 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime) {
         vector = {
             x: 1,
             y: 1
+        },
+        mouse = {
+            x: 0,
+            y: 0
         };
 
     circle
@@ -12,18 +16,34 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime) {
         .attr('r', circleSize)
         .attr('fill', 'red');
 
+    function checkRightBorder(currX) {
+        return vector.x > 0 && (currX + circleSize) === svgWidth;
+    }
+
+    function checkLeftBorder(currX) {
+        return vector.x < 0 && (currX - circleSize) === 0;
+    }
+
+    function checkBottomBorder(currY) {
+        return vector.y > 0 && (currY + circleSize) === svgHeight;
+    }
+
+    function checkTopBorder(currY) {
+        return vector.y < 0 && (currY - circleSize) === 0;
+    }
+
     function checkForXEnd(currX) {
-        if (vector.x > 0 && (currX + circleSize) === svgWidth) {
+        if (checkRightBorder(currX) || currX === mouse.x) {
             vector.x = -1;
-        } else if (vector.x < 0 && (currX - circleSize) === 0) {
+        } else if (checkLeftBorder(currX) || currX === mouse.x) {
             vector.x = 1;
         }
     }
 
     function checkForYEnd(currY) {
-        if (vector.y > 0 && (currY + circleSize) === svgHeight) {
+        if (checkBottomBorder(currY) || currY === mouse.y) {
             vector.y = -1;
-        } else if (vector.y < 0 && (currY - circleSize) === 0) {
+        } else if (checkTopBorder(currY) || currY === mouse.y) {
             vector.y = 1;
         }
     }
@@ -75,6 +95,14 @@ function Point(svgWidth, svgHeight, radius, cx, cy, colorChangeTime) {
                 startColorAnimation(colorToSet, speed);
             });
     }
+
+
+    function onMouseMove(e) {
+        vector.x = vector.x * -1;
+        vector.y = vector.y * -1;
+    }
+
+    circle.on("mouseenter", onMouseMove);
 
     startColorAnimation('red', colorChangeTime);
     startMove(20);
