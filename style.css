@@ -11,3 +11,14 @@ svg {
 circle {
     opacity: 0.7;
 }
+
+#options_form {
+    background-color: whitesmoke;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    height: 100px;
+    width: 200px;
+}
