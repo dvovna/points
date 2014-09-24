@@ -22,3 +22,7 @@ circle {
     height: 100px;
     width: 200px;
 }
+
+select {
+    float: left;
+}

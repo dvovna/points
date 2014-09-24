@@ -7,12 +7,14 @@
         moveAnimationYTime,
         cx,
         cy,
-        radius;
+        radius,
+        pointNumberEl = document.getElementById("point_number");
+        isPointEl = document.getElementById("is_point");
 
-    function createPoints(isPointOrCircle) {
+    function createPoints(isPointOrCircle, pointsNumber) {
         svg.selectAll("circle").remove();
 
-        for (var i = 1; i <= 100; i = i + 1) {
+        for (var i = 1; i <= pointsNumber; i = i + 1) {
             radius = !isPointOrCircle ? Math.floor(Math.random() * 50 + 1) : 2;
             cx = i * Math.floor(Math.random() * 10 + 1);
             cy = i * Math.floor(Math.random() * 10 + 1);
@@ -24,9 +26,13 @@
         }
     }
 
-    document.getElementById("is_point").onchange = function () {
-        createPoints(this.checked);
+    isPointEl.onchange = function () {
+        createPoints(this.checked, pointNumberEl.value);
     };
-    createPoints(false);
+
+    pointNumberEl.onchange = function () {
+        createPoints(isPointEl.checked, this.value);
+    };
+    createPoints(isPointEl.checked, pointNumberEl.value);
 }());
 
