@@ -1,4 +1,4 @@
-function Point(svgW, svgH, radius, cx, cy, colorChangeTime, moveSpeed) {
+function Point(svgW, svgH, radius, cx, cy, colorChangeTime, moveXSpeed, moveYSpeed) {
     var circle = d3.select('svg').append('circle'),
         circleSize = radius || 10,
         vector = {
@@ -7,7 +7,8 @@ function Point(svgW, svgH, radius, cx, cy, colorChangeTime, moveSpeed) {
         },
         svgWidth = svgW,
         svgHeight = svgH,
-        intervalId;
+        intervalYId,
+        intervalXId;
 
     circle
         .attr('cx', cx)
@@ -53,12 +54,16 @@ function Point(svgW, svgH, radius, cx, cy, colorChangeTime, moveSpeed) {
         return getNextCoord(vector.y, y);
     }
 
-    function startMove(intervalTime) {
-        intervalId = setInterval(function () {
+    function startMove(intervalXTime, intervalYTime) {
+        intervalXId = setInterval(function () {
             circle
                 .attr('cx', getX)
+        }, intervalXTime);
+
+        intervalYId = setInterval(function () {
+            circle
                 .attr('cy', getY)
-        }, intervalTime);
+        }, intervalYTime);
     }
 
     function startColorAnimation(color, speed) {
@@ -83,5 +88,5 @@ function Point(svgW, svgH, radius, cx, cy, colorChangeTime, moveSpeed) {
     circle.on("mouseenter", onMouseMove);
 
     startColorAnimation('red', colorChangeTime);
-    startMove(moveSpeed);
+    startMove(moveXSpeed, moveYSpeed);
 }
